@@ -107,6 +107,20 @@ function showHome(){
 function goHome(){if(history.state&&history.state.pp==="sec"){history.back();}else{showHome();}}
 window.addEventListener("popstate",showHome);
 window.addEventListener("keydown",function(e){if(e.key==="Escape"&&document.getElementById("viewer").style.display!=="none")goHome();});
+
+// Ritorno dal login Google: la pagina gestionale (fuori dalla Suite, dove Google
+// e' tornato dopo l'OAuth) ci rimanda qui con ?tab=xxx per riaprire subito la sezione giusta.
+(function(){
+  var qp=new URLSearchParams(window.location.search);
+  var tab=qp.get("tab");
+  if(tab){
+    var idx=SECTIONS.findIndex(function(s){return s.tab===tab;});
+    if(idx>-1){
+      history.replaceState(null,"",window.location.pathname);
+      openSection(idx);
+    }
+  }
+})();
 </script>
 </body>
 </html>
